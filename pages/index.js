@@ -118,7 +118,7 @@ const Home = () => {
     } else {
       setApiKeyError(false)
     }
-    if (!videoId) {
+    if (!videoId || videoId == 'false') {
       setVideoIdError(true)
       isValid = false
     } else {
