@@ -51,6 +51,7 @@ export default (req, res) => {
     youtube.commentThreads.list(params)
       .then(data => {
         data.data.items.forEach(comment => comments.push(comment.snippet.topLevelComment.snippet.textOriginal.replace(/(\r\n|\n|\r)/gm, "")))
+        comments.filter(comment => comment.includes(SEARCH_TERMS))
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
         res.end(JSON.stringify({ comments }))
