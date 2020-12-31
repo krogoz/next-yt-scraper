@@ -219,7 +219,7 @@ const Home = () => {
               label="Youtube Video URL"
               value={videoId}
               onChange={e=>{
-                const id = getVideoIdFromUrl(videoId)
+                const id = getVideoIdFromUrl(e.target.value)
                 setVideoId(id)
               }}
               error={videoIdError}
