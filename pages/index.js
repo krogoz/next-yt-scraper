@@ -83,7 +83,7 @@ const Home = () => {
    * @returns {Promise<Object>}
    */
   const scrape = async () => {
-    const response = await fetch('https://next-yt-scraper.vercel.app/api/scrape', {
+    const response = await fetch('/api/scrape', {
       method: 'post',
       body: JSON.stringify({
         apiKey,
