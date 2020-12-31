@@ -75,10 +75,7 @@ const Home = () => {
    * Fires when sort by option is selected.
    * @param {*} e 
    */
-  const handleSortByChange = e => {
-    console.log(e.target.value)
-    setSortBy(e.target.value)
-  }
+  const handleSortByChange = e => setSortBy(e.target.value)
 
   /**
    * Stores apiKey in localStorage.
@@ -95,7 +92,8 @@ const Home = () => {
    * @returns {Promise<Object>}
    */
   const scrape = async () => {
-    const response = await fetch('/api/scrape', {
+    console.log(`scraping video id: ${getVideoIdFromUrl(videoUrl)} ...`)
+    const response = await fetch('http://localhost:3000/api/scrape', {
       method: 'post',
       body: JSON.stringify({
         apiKey,

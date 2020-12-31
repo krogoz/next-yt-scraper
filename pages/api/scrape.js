@@ -52,7 +52,7 @@ export default (req, res) => {
       .then(data => {
         data.data.items.forEach(comment => comments.push({
           text: comment.snippet.topLevelComment.snippet.textOriginal.replace(/(\r\n|\n|\r)/gm, ""),
-          url: `https://www.youtube.com/watch?v=QS6hVdou7TA&lc=${comment.id}`
+          url: `https://www.youtube.com/watch?v=${VIDEO_ID}&lc=${comment.id}`
         }))
         comments = comments.filter(comment => comment.text.includes(SEARCH_TERMS))
         
