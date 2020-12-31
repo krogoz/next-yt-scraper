@@ -5,7 +5,6 @@ import styles from 'styles/Home.module.sass'
 
 import {
   FormControl,
-  FormHelperText,
   InputLabel,
   TextField,
   MenuItem,
@@ -25,12 +24,7 @@ import {Alert} from "@material-ui/lab"
 
 import {
   Menu,
-  VpnKey,
-  Videocam,
-  Search,
-  Sort,
   Send,
-  Copyright
 } from "@material-ui/icons"
 
 const Home = () => {
@@ -89,7 +83,7 @@ const Home = () => {
    * @returns {Promise<Object>}
    */
   const scrape = async () => {
-    const response = await fetch('http://localhost:3000/api/scrape', {
+    const response = await fetch('https://next-yt-scraper.vercel.app/api/scrape', {
       method: 'post',
       body: JSON.stringify({
         apiKey,
