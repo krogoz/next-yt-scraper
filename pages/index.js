@@ -93,7 +93,7 @@ const Home = () => {
    */
   const scrape = async () => {
     console.log(`scraping video id: ${getVideoIdFromUrl(videoUrl)} ...`)
-    const response = await fetch('http://localhost:3000/api/scrape', {
+    const response = await fetch('/api/scrape', {
       method: 'post',
       body: JSON.stringify({
         apiKey,
