@@ -49,8 +49,8 @@ const Home = () => {
   const [apiKey, setApiKey] = useState('')
   const [apiKeyError, setApiKeyError] = useState(false)
   
-  const [videoId, setVideoId] = useState('')
-  const [videoIdError, setVideoIdError] = useState(false)
+  const [videoUrl, setVideoUrl] = useState('')
+  const [videoUrlError, setVideoUrlError] = useState(false)
   
   const [searchTerm, setSearchTerm] = useState('')
   const [sortBy, setSortBy] = useState('Most Recent')
@@ -99,7 +99,7 @@ const Home = () => {
       method: 'post',
       body: JSON.stringify({
         apiKey,
-        videoId,
+        videoId: getVideoIdFromUrl(videoUrl),
         searchTerm,
         sortBy
       })
@@ -119,11 +119,11 @@ const Home = () => {
     } else {
       setApiKeyError(false)
     }
-    if (!videoId || videoId == 'false') {
-      setVideoIdError(true)
+    if (!videoUrl) {
+      setVideoUrlError(true)
       isValid = false
     } else {
-      setVideoIdError(false)
+      setVideoUrlError(false)
     }
     return isValid
   }
@@ -223,12 +223,9 @@ const Home = () => {
           <Box className={styles['form-item']} >
             <TextField
               label="Youtube Video URL"
-              value={videoId}
-              onChange={e=>{
-                const id = getVideoIdFromUrl(e.target.value)
-                setVideoId(id)
-              }}
-              error={videoIdError}
+              value={videoUrl}
+              onChange={e=>setVideoUrl(e.target.value)}
+              error={videoUrlError}
               helperText="Required*"
             />
           </Box>
