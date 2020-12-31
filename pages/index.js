@@ -35,7 +35,8 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [comments, setComments] = useState(null)
-  const [textareaValue, setTextareaValue] = useState('N/A')
+  const [urlTextareaValue, setUrlTextareaValue] = useState('N/A')
+  const [textTextareaValue, setTextTextareaValue] = useState('N/A')
 
   /**
    * Alert State
@@ -157,20 +158,24 @@ const Home = () => {
     }
   }
 
-  const textareaRef = useRef(null)
+  const urlTextareaRef = useRef(null)
 
   const createCopyText = comments => {
     let copyText = ''
-    console.log(comments)
+    let textTextarea = ''
+
     comments.forEach(comment => {
       copyText += comment.url + '\n'
+      textTextarea += comment.text + '\n'
     })
-    console.log(copyText)
-    setTextareaValue(copyText)
+
+    setUrlTextareaValue(copyText)
+    setTextTextareaValue(textTextarea)
+
     setTimeout(()=>{
       console.log('timeout called')
-      textareaRef.current.select()
-      textareaRef.current.setSelectionRange(0, 99999)
+      urlTextareaRef.current.select()
+      urlTextareaRef.current.setSelectionRange(0, 99999)
       document.execCommand('copy')
       setSuccess(true)
     }, 500)
@@ -272,12 +277,24 @@ const Home = () => {
             </Button>
           </Box>
 
-          <textarea
-            ref={textareaRef}
-            rows="5"
-            value={textareaValue}
-            style={{display: 'block'}}
-          ></textarea>
+          <Box className={styles['form-item']}>
+            <Typography variant="body2">Comments (URL): </Typography>
+            <textarea
+              ref={urlTextareaRef}
+              rows="5"
+              value={urlTextareaValue}
+              style={{display: 'block'}}
+            ></textarea>
+          </Box>
+          
+          <Box className={styles['form-item']}>
+            <Typography variant="body2">Comments (Text): </Typography>
+            <textarea
+              rows="5"
+              value={textTextareaValue}
+              style={{display: 'block'}}
+            ></textarea>
+          </Box>
           
         </Paper>
 
