@@ -60,6 +60,17 @@ const Home = () => {
   }, [])
 
   /**
+   * Gets the Youtube Video ID from URL.
+   * @param {String} url
+   * @returns {String} videoId 
+   */
+  const getVideoIdFromUrl = url => {
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false
+  }
+
+  /**
    * Fires when sort by option is selected.
    * @param {*} e 
    */
@@ -205,9 +216,12 @@ const Home = () => {
 
           <Box className={styles['form-item']} >
             <TextField
-              label="Youtube Video ID"
+              label="Youtube Video URL"
               value={videoId}
-              onChange={e=>setVideoId(e.target.value)}
+              onChange={e=>{
+                const id = getVideoIdFromUrl(videoId)
+                setVideoId(id)
+              }}
               error={videoIdError}
               helperText="Required*"
             />
