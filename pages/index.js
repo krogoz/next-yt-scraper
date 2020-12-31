@@ -161,8 +161,9 @@ const Home = () => {
 
   const createCopyText = comments => {
     let copyText = ''
+    console.log(comments)
     comments.forEach(comment => {
-      copyText += comment + '\n'
+      copyText += comment.url + '\n'
     })
     console.log(copyText)
     setTextareaValue(copyText)

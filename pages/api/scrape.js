@@ -50,8 +50,12 @@ export default (req, res) => {
   return new Promise((resolve, reject) => {
     youtube.commentThreads.list(params)
       .then(data => {
-        data.data.items.forEach(comment => comments.push(comment.snippet.topLevelComment.snippet.textOriginal.replace(/(\r\n|\n|\r)/gm, "")))
-        comments = comments.filter(comment => comment.includes(SEARCH_TERMS))
+        data.data.items.forEach(comment => comments.push({
+          text: comment.snippet.topLevelComment.snippet.textOriginal.replace(/(\r\n|\n|\r)/gm, ""),
+          url: `https://www.youtube.com/watch?v=QS6hVdou7TA&lc=${comment.id}`
+        }))
+        comments = comments.filter(comment => comment.text.includes(SEARCH_TERMS))
+        
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
         res.end(JSON.stringify({ comments }))
