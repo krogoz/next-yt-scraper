@@ -18,6 +18,7 @@ import {
   Typography,
   Paper,
   CircularProgress,
+  Slider
 } from '@material-ui/core'
 
 import {Alert} from "@material-ui/lab"
@@ -35,8 +36,6 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [comments, setComments] = useState(null)
-  const [urlTextareaValue, setUrlTextareaValue] = useState('N/A')
-  const [textTextareaValue, setTextTextareaValue] = useState('N/A')
 
   /**
    * Alert State
@@ -54,6 +53,14 @@ const Home = () => {
   
   const [searchTerm, setSearchTerm] = useState('')
   const [sortBy, setSortBy] = useState('Most Recent')
+
+  const [resultsLimit, setResultsLimit] = useState(100)
+
+  /**
+   * Output textareas
+   */
+  const [urlTextareaValue, setUrlTextareaValue] = useState('N/A')
+  const [textTextareaValue, setTextTextareaValue] = useState('N/A')
 
   useEffect(()=>{
     if (localStorage.getItem('apiKey')) setApiKey(localStorage.getItem('apiKey'))
@@ -127,15 +134,20 @@ const Home = () => {
   }
 
   /**
+   * Clears existing alert
+   */
+  const removeAlert = () => {
+    clearTimeout(alertTimeout)
+    setSuccess(false)
+  }
+
+  /**
    * Fires once form is submitted.
    */
   const handleSubmitForm = async () => {
     const isValid = validateForm()
     if (isValid) {
-      if (alertTimeout) {
-        clearTimeout(alertTimeout)
-        setSuccess(false)
-      }
+      if (alertTimeout) removeAlert()
       setIsLoading(true)
 
       saveApiKey()
@@ -145,7 +157,7 @@ const Home = () => {
       setComments(fetchedComments)
 
       if (fetchedComments) {
-        createCopyText(fetchedComments)
+        handleFetchedComments(fetchedComments)
         const tmOut = setTimeout(()=>{
           setSuccess(false)
         }, 8000)
@@ -158,20 +170,35 @@ const Home = () => {
 
   const urlTextareaRef = useRef(null)
 
-  const createCopyText = comments => {
+  const handleFetchedComments = comments => {
+    /**
+     * Set limit on results
+     */
+    comments = comments.slice(0, resultsLimit)
+    console.log(comments)
+
     let copyText = ''
     let textTextarea = ''
 
+    /**
+     * Create copyable texts
+     */
     comments.forEach(comment => {
       copyText += comment.url + '\n'
       textTextarea += comment.text + '\n'
     })
 
+    /**
+     * Set textareas
+     */
     setUrlTextareaValue(copyText)
     setTextTextareaValue(textTextarea)
 
+    /**
+     * Wait until state update, then copy url textarea and
+     * show success alert.
+     */
     setTimeout(()=>{
-      console.log('timeout called')
       urlTextareaRef.current.select()
       urlTextareaRef.current.setSelectionRange(0, 99999)
       document.execCommand('copy')
@@ -197,7 +224,7 @@ const Home = () => {
         </Toolbar>
       </AppBar>
 
-      <Container style={{display: 'flex', justifyContent: 'center'}} >
+      <Container className={styles.container} >
 
         <Paper elevation={3} className={styles.form}>
 
@@ -251,6 +278,15 @@ const Home = () => {
             </FormControl>
           </Box>
 
+          <Box className={styles['form-item']}>
+            <TextField
+              type="number"
+              label="Limit Results"
+              value={resultsLimit}
+              onChange={e=>setResultsLimit(e.target.value)}
+            />
+          </Box>
+
           <Box className={styles['form-item']} >
             <Button 
               variant="contained"
@@ -271,26 +307,32 @@ const Home = () => {
               )}
             </Button>
           </Box>
+          
+        </Paper>
 
+        <Paper elevation={3} className={styles.form}>
           <Box className={styles['form-item']}>
-            <Typography variant="body2">Comments (URL): </Typography>
-            <textarea
-              ref={urlTextareaRef}
-              rows="5"
+            <TextField
+              inputRef={urlTextareaRef}
               value={urlTextareaValue}
-              style={{display: 'block'}}
-            ></textarea>
+              label="List of comment urls:"
+              multiline
+              rows={5}
+              defaultValue="N/A"
+              variant="filled"
+            />
           </Box>
           
           <Box className={styles['form-item']}>
-            <Typography variant="body2">Comments (Text): </Typography>
-            <textarea
-              rows="5"
+            <TextField
               value={textTextareaValue}
-              style={{display: 'block'}}
-            ></textarea>
+              label="List of comment texts:"
+              multiline
+              rows={5}
+              defaultValue="N/A"
+              variant="filled"
+            />
           </Box>
-          
         </Paper>
 
       </Container>
